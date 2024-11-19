@@ -1,98 +1,78 @@
-let choices = ["Rock","Paper","Scissor"], computerScore = 0,humanScore = 0,  winner = false,wond = ""
-var computerChoice = "", user = ""
+const rock = document.querySelector("#rock");
+const paper = document.querySelector("#paper");
+const scissor = document.querySelector("#scissor");
+const roundWinner = document.querySelector("#winnerThisRound");
+const playerScore = document.querySelector("#playerScore");
+const computerScore = document.querySelector("#aiScore");
+const moves = document.querySelector("#moves");
+const winner = document.querySelector("#whoWinner");
+let aiScoreCount = 0,
+  playerScoreCount = 0,
+  movesLeft = 5;
+var aiTurns = ["rock", "paper", "scissor"];
+let playerTurn = "",
+  aiTurn = "";
+
 playGame();
+function playGame() {
+  rock.addEventListener("click", () => {
+    playerTurn = "rock";
+    aiTurn = getAiTurn(aiTurns);
+    checkWinner(playerTurn, aiTurn);
+  });
 
-function getPlayerInput(){
-    return prompt("Choose command Rock or Paper or Scissor");
+  paper.addEventListener("click", () => {
+    playerTurn = "paper";
+    aiTurn = getAiTurn(aiTurns);
+    checkWinner(playerTurn, aiTurn);
+  });
 
+  scissor.addEventListener("click", () => {
+    playerTurn = "scissor";
+    aiTurn = getAiTurn(aiTurns);
+    checkWinner(playerTurn, aiTurn);
+  });
 }
 
-function getComputerChoice(){
-    let random =  Math.ceil(Math.random()*choices.length-1)
-    return choices[random];
+function checkWinner(playerTurn, aiTurn) {
+  if (playerTurn == "paper" && aiTurn == "rock") {
+    roundWinner.innerHTML = "Player Scored!!!";
+    playerScoreCount++;
+    movesLeft--;
+  } else if (playerTurn == "scissor" && aiTurn == "paper") {
+    roundWinner.innerHTML = "Player Scored!!!";
+    playerScoreCount++;
+    movesLeft--;
+  } else if (playerTurn == "rock" && aiTurn == "scissor") {
+    roundWinner.innerHTML = "Player Scored!!!";
+    playerScoreCount++;
+    movesLeft--;
+  } else {
+    roundWinner.innerHTML = "Computer Scored!!!";
+    aiScoreCount++;
+    movesLeft--;
+  }
+  updateScores(aiScoreCount, playerScoreCount, movesLeft);
+}
+function updateScores(aiScoreCount, playerScoreCount, movesLeft) {
+  playerScore.innerHTML = playerScoreCount;
+  computerScore.innerHTML = aiScoreCount;
+  moves.innerHTML = movesLeft;
 
+  if (aiScoreCount == 5 || playerScoreCount == 5 || movesLeft == 0) {
+    declareWinner(aiScoreCount, playerScoreCount, movesLeft);
+  }
 }
 
-function checkWinner(humanScore,computerScore){
-    if(humanScore == 5 || computerScore == 5){
-       return true;
-    }
-    return false;
-
+function getAiTurn(aiTurns) {
+  return aiTurns[Math.ceil(Math.random() * 3 - 1)];
 }
-
-function showCurrentScore(humanScore,computerScore){
-    console.log("Player Score:"+humanScore+"\nComputer Score:"+computerScore);
-
+function declareWinner(aiScoreCount, playerScoreCount, movesLeft) {
+  if (aiScoreCount == 5 || aiScoreCount > playerScoreCount) {
+    winner.innerHTML = "Computer wins!!!";
+  } else if (playerScoreCount == 5 || playerScoreCount > aiScoreCount) {
+    winner.innerHTML = "Player wins!!!";
+  } else if (movesLeft == 5 && aiScoreCount == playerScoreCount) {
+    winner.innerHTML = "Draw!!";
+  }
 }
-
-function declare(winner,wond){
-    if(winner){
-        console.log(wond+" Wins!!");
-        
-    }
-  
-}
-function playGame(){
-    user = getPlayerInput()
-    computerChoice = getComputerChoice();
-    let converted = user.toUpperCase()
-    let computerConverted = computerChoice.toUpperCase()
-
-if(computerConverted == "ROCK" && converted == "SCISSOR"){
-    console.log("Player choice: "+converted+" Computer choice: "+computerConverted);
-    console.log("Computer scored!!")
-    computerScore++;
-    wond = "Computer"  
-
-}else if(computerConverted == "PAPER" && converted == "ROCK"){
-    console.log("Player choice: "+converted+" Computer choice: "+computerConverted);
-       console.log("Computer scored!!");
-       computerScore++;
-       wond = "Computer"
-
-   }else if(computerConverted == "SCISSOR" && converted == "PAPER"){
-       console.log("Player choice: "+converted+" Computer choice: "+computerConverted);
-       console.log("Computer scored!!");
-       computerScore++;
-       wond = "Computer"
-
-   }else if(computerConverted == "ROCK" && converted== "ROCK"){   
-       console.log("Player choice: "+converted+" Computer choice: "+computerConverted);
-       console.log("Draw!!");
-
-   }else if(computerConverted == "PAPER" && converted == "PAPER"){
-       console.log("Player choice: "+converted+" Computer choice: "+computerConverted);
-       console.log("Draw!!");
-
-   }else if(computerConverted == "SCISSOR" && converted == "SCISSOR"){
-       console.log("Player choice: "+converted+" Computer choice: "+computerConverted);
-       console.log("Draw!!");
-
-   }else{
-       console.log("Satisfied");
-       console.log("Player choice: "+converted+" Computer choice: "+computerConverted);
-       console.log("Player scored!!");
-       humanScore++;
-       wond = "Player"
-
-   }
-   
-  
-   showCurrentScore(humanScore,computerScore);
-   winner = checkWinner(humanScore,computerScore);
-   declare(winner,wond);
-   
-   if(!winner){
-    playGame();
-
-   }
-  
-
-}
-
-
-
-
-
-
