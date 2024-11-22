@@ -14,6 +14,7 @@ let playerTurn = "",
   aiTurn = "";
 
 playGame();
+
 function playGame() {
   rock.addEventListener("click", () => {
     playerTurn = "rock";
